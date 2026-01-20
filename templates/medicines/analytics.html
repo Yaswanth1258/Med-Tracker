@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}Analytics - Medicine Tracker{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <h1>Health Analytics</h1>
+    <a href="{% url 'medicine_list' %}" class="btn btn-text" style="color: var(--primary-color);">
+        &larr; Back to Medicines
+    </a>
+</div>
+
+<!-- Analytics Chart Section -->
+<div class="card" style="margin-bottom: 2rem;">
+    <h2 style="margin-bottom: 1rem; font-size: 1.25rem; color: var(--primary-color);">Weekly Adherence</h2>
+    <div style="height: 400px;">
+        <canvas id="adherenceChart"></canvas>
+    </div>
+</div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{{ chart_dates|json_script:"chart-dates-data" }}
+{{ chart_counts|json_script:"chart-counts-data" }}
+
+<script>
+    const ctx = document.getElementById('adherenceChart');
+    const chartDates = JSON.parse(document.getElementById('chart-dates-data').textContent);
+    const chartCounts = JSON.parse(document.getElementById('chart-counts-data').textContent);
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: chartDates,
+            datasets: [{
+                label: 'Doses Taken',
+                data: chartCounts,
+                backgroundColor: 'rgba(74, 144, 226, 0.7)',
+                borderColor: 'rgba(74, 144, 226, 1)',
+                borderWidth: 1,
+                borderRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { beginAtZero: true, ticks: { stepSize: 1 } },
+                x: { grid: { display: false } }
+            }
+        }
+    });
+</script>
+{% endblock %}
