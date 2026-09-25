@@ -27,9 +27,14 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-y_0l3=8=)=k(6jx-)vwf5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ['*']
-
-
+ALLOWED_HOSTS = [
+    "med-tracker-ivkt.onrender.com",
+    "localhost",
+    "127.0.0.1",
+]
+CSRF_TRUSTED_ORIGINS = [
+    "https://med-tracker-ivkt.onrender.com",
+]
 # Application definition
 
 INSTALLED_APPS = [
